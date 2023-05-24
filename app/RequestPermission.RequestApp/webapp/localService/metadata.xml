@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="RequestPermissionService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <EntityContainer Name="EntityContainer">
+                <EntitySet Name="Student" EntityType="RequestPermissionService.Student">
+                    <NavigationPropertyBinding Path="request" Target="Request"/>
+                </EntitySet>
+                <EntitySet Name="Request" EntityType="RequestPermissionService.Request">
+                    <NavigationPropertyBinding Path="student" Target="Student"/>
+                </EntitySet>
+            </EntityContainer>
+            <EntityType Name="Student">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="name" Type="Edm.String" MaxLength="100" Nullable="false"/>
+                <Property Name="class" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="phone" Type="Edm.String" MaxLength="12"/>
+                <Property Name="email" Type="Edm.String" MaxLength="100"/>
+                <Property Name="age" Type="Edm.Int32"/>
+                <NavigationProperty Name="request" Type="Collection(RequestPermissionService.Request)" Partner="student"/>
+            </EntityType>
+            <EntityType Name="Request">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="app_name" Type="Edm.String" MaxLength="100"/>
+                <Property Name="reason" Type="Edm.String" MaxLength="500"/>
+                <Property Name="status" Type="Edm.String" MaxLength="100"/>
+                <Property Name="teacher_name" Type="Edm.String" MaxLength="100"/>
+                <NavigationProperty Name="student" Type="RequestPermissionService.Student" Partner="request">
+                    <ReferentialConstraint Property="student_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="student_ID" Type="Edm.Guid"/>
+            </EntityType>
+            <Annotations Target="RequestPermissionService.Student/ID">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="RequestPermissionService.Request/ID">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
